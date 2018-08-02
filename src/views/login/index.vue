@@ -17,6 +17,7 @@
 
 <script>
 import store from "@/store";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "login",
   data() {
@@ -27,21 +28,43 @@ export default {
     };
   },
   created: function() {
-    console.log(store.getters.getNumAdd);
+    this.createMap();
+  },
+  computed: {
+    ...mapGetters(["filterAddArray"])
   },
   methods: {
+    ...mapMutations({
+      setAge: "SET_AGE"
+    }),
     changeAge() {
       this.msg = this.msg + 1;
-      store.commit("SET_AGE", this.msg);
+      this.setAge(this.msg)
       this.msg = store.state.show;
       let data1 = {};
-      data1.property = 'username'
+      data1.property = "username";
       data1.data = this.username;
-      store.commit("SET_INFO",data1);
+      store.commit("SET_INFO", data1);
       let data2 = {};
-      data2.property = 'password'
+      data2.property = "password";
       data2.data = this.password;
-      store.commit("SET_INFO",data2);
+      store.commit("SET_INFO", data2);
+    },
+    createMap() {
+      let data1 = [
+        { name: "小明", age: 12 },
+        { name: "小黄", age: 23 },
+        { name: "小黄1", age: 4 },
+        { name: "小黄2", age: 3 },
+        { name: "小黄3", age: 73 },
+        { name: "小黄4", age: 83 }
+      ];
+      let data = {};
+      data.property = "usernameInfos";
+      data.data = data1;
+      store.commit("SET_INFO", data);
+      console.log(this.filterAddArray(20));
+      console.log(store.state.usernameInfos);
     }
   }
 };
